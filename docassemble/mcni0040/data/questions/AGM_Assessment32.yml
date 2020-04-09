@@ -7,67 +7,92 @@ data:
     Age: 23
     Hobbies: Cooking and reading
     Likes Pets?: True
+    AGMchoices: 
+      - 'First Name: Ashleigh'
+      - 'Last Name: Courtney'
+      - 'Age: 23' 
+      - 'Hobbies: cooking and reading'
+      - 'Likes Pets?: True' 
   - First Name: Courtney
     Last Name: McNichol
     Age: 20
-    Hobbies: Talking shit 
+    Hobbies: Makeup 
     Likes Pets?: True
+    AGMchoices: 
+      - 'First Name: Courtney'
+      - 'Last Name: McNichol'
+      - 'Age: 20' 
+      - 'Hobbies: Makeup'
+      - 'Likes Pets?: True' 
   - First Name: Karen
     Last Name: Sutherland
     Age: 57
     Hobbies: Reading and gardening
     Likes Pets?: True
+    AGMchoices: 
+      - 'First Name: Karen'
+      - 'Last Name: Sutherland'
+      - 'Age: 57' 
+      - 'Hobbies: Reading and gardning' 
+      - 'Likes Pets?: True' 
   - First Name: Ian
     Last Name: McNichol
     Age: 53
     Hobbies: Playing guitar 
     Likes Pets?: True
+      AGMchoices: 
+        - 'First Name: Ian'
+        - 'Last Name: McNichol'
+        - 'Age: 53'
+        - 'Hobbies: Playing guitar'
+        - 'Likes Pets?: True'
 ---
-variable name: AGMquestions
-use objects: true 
-data: 
-  - AGMquestion: Is this information below correct for Ashleigh? 
-    AGMchoices: 
-      - First Name: Ashleigh
-      - Last Name: McNichol
-      - Age: 23
-      - Hobbies: Reading and cooking
-      - Likes Pets?: True 
-  - AGMquestion: Is this information below correct for Courtney? 
-    AGMchoices: 
-      - First Name: Courtney
-      - Last Name: McNichol
-      - Age: 20
-      - Hobbies: Talking shit 
-      - Likes Pets?: True 
-  - AGMquestion: Is this information below correct for Karen? 
-    AGMchoices: 
-      - First Name: Karen
-      - Last Name: Sutherland
-      - Age: 57
-      - Hobbies: Reading and gardening
-      - Likes Pets?: True
-  - AGMquestion: Is this information below correct for Ian? 
-    AGMchoices: 
-      - First Name: Ian
-      - Last Name: McNichol
-      - Age: 53
-      - Hobbies: Playing guitar
-      - Likes Pets: True
-
-    
---- 
-madnatory: True
+mandatory: True
 question: Data table as a table
 subquestion: | 
   #### Our data was a table. Now we will make it a table again!
   
-  ${AGMcolumn_header}
-  ${AGMdashes}
+  ${ AGMquestion_table } 
 ---
-code: | 
-  AGMcolumn_header = ""
-  
+table: AGMquestion_table
+rows: AGMquestions
+columns: 
+  - First Name: |
+      row_item['First Name']
+  - Last Name: | 
+      row_item['Last Name'] 
+  - Age: |
+      row_item['Age']
+  - Hobbies: |
+      row_item['Hobbies']
+  - Likes Pets?: |
+      row_item['Likes Pets?']
+  - Selected answers: |
+      row_item['AGManswers'].true_values() 
+---
+mandatory: True 
+question: |
+  Is this information below correct for ${ AGMperson_info[i]['First Name] }? 
+fields: 
+  - no label: AGMperson_info[i]['AGManswers'] 
+    datatypes: checkboxes
+    choices: 
+      - ${ 'First Name : {}'.format(AGMperson_info[i]['First Name'])}
+      - ${ 'Last Name : {}'.format(AGMperson_info[i]['Last Name'])} 
+      - ${ 'Age: {}'.format(AGMperson_info[i]['Age'])}
+      - ${ 'Hobbies: {}'.format(AGMperson_info[i]['Hobbies'])}
+      - ${ 'Likes Pets?: {}'.format(AGMperson_info[i]['Likes Pets?'])} 
+---
+
+ # or should the above be as below? How to iterate to get from that to this?  where does the code block go in all of this? 
+mandatory: True     
+question: |
+  ${ AGMquestions[i]['AGMquestion'] }
+fields:
+  - no label: AGMquestions[i]['AGManswers']
+    datatype: checkboxes
+    code: AGMquestions[i]['AGMchoices']
+---
   
    
   
